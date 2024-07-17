@@ -19,31 +19,35 @@ on:
 jobs:
     test:
         runs-on: ubuntu-latest
-        container: 
-            image: node:20-alpine
-            options: --network-alias host
         services:
             jsreport:
                 image: jsreport/jsreport:4.5.0-full
+                ports:
+                    - 5488:5488
                 env:
                     extensions_chromePdf_launchOptions_args: --no-sandbox
         steps:
             - name: whoami
               run: whoami
+            - name: ip
+              run: ip a s
 
             - name: Set System locale
               run: |
-                locale-gen en_GB.UTF-8
-                update-locale LANG=en_GB.UTF-8
+                sudo locale-gen en_GB.UTF-8
+                sudo update-locale LANG=en_GB.UTF-8
 
             - name: install stuff
-              run: apt-get update && apt-get install -y ghostscript libfontconfig1
+              run: sudo apt-get update && sudo apt-get install -y ghostscript libfontconfig1
 
             - name: check pwsh
               shell: pwsh
               run: Get-Location
 
             - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                node-version: 'lts/*'
 
             - name: sleep
               run: sleep 10s
