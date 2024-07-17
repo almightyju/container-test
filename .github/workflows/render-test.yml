@@ -32,6 +32,9 @@ jobs:
               with:
                 node-version: 'lts/*'
 
+            - name: sleep
+              run: sleep 10s
+              
             - name: exec
               env:
                 JSREPORT_HOSTNAME: ${{ inputs.jsreport_hostname }}
