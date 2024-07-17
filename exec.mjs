@@ -12,6 +12,9 @@ if(process.env.JSREPORT_HOSTNAME)
 if(process.env.HTTP_SERVER_HOSTNAME)
     httpServerHostname = process.env.HTTP_SERVER_HOSTNAME;
 
+console.log('js report hostname is ', jsReportHostname);
+console.log('http server hostname is ', httpServerHostname);
+
 const styles = fs.readFileSync('styles.css', 'utf8');
 const toRender = fs.readFileSync('toRender.html', 'utf8');
 
@@ -48,8 +51,7 @@ var options = {
 };
 
 var req = http.request(options, (res) => {
-    console.log('statusCode:', res.statusCode);
-    console.log('headers:', res.headers);
+    console.log('response statusCode:', res.statusCode);
 
     res.on('data', (d) => {
         fs.writeFileSync('./result.pdf', d);
@@ -58,9 +60,11 @@ var req = http.request(options, (res) => {
 });
 
 req.on('error', (e) => {
+    console.error('error with request');
     console.error(e);
     server.close();
 });
 
+console.log('sending request: ', options);
 req.write(toPost);
 req.end();
