@@ -29,28 +29,16 @@ jobs:
         steps:
             - name: apt install
               run: sudo apt-get update && sudo apt-get install cabextract
+
             - name: install font
-              run: wget https://gist.githubusercontent.com/maxwelleite/913b6775e4e408daa904566eb375b090/raw/ttf-ms-tahoma-installer.sh -q -O - | sudo bash
-
-            - name: Set System locale
               run: |
-                sudo locale-gen en_GB.UTF-8
-                sudo update-locale LANG=en_GB.UTF-8
-
-            - name: install stuff
-              run: sudo apt-get update && sudo apt-get install -y ghostscript libfontconfig1
-
-            - name: check pwsh
-              shell: pwsh
-              run: Get-Location
+                docker cp ./tahoma.ttf ${{ job.services.jsreport.id }}:/usr/share/fonts
+                docker exec ${{ job.services.jsreport.id }} fc-cache -f
 
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
                 node-version: 'lts/*'
-
-            - name: sleep
-              run: sleep 10s
 
             - name: exec
               env:
@@ -59,7 +47,7 @@ jobs:
               run: node ./exec.mjs
             
             - name: Save result
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                 name: result.pdf
                 path: result.pdf
