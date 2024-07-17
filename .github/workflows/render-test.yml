@@ -28,10 +28,20 @@ jobs:
                 env:
                     extensions_chromePdf_launchOptions_args: --no-sandbox
         steps:
+            - name: whoami
+              run: whoami
+
             - name: Set System locale
               run: |
-                sudo locale-gen en_GB.UTF-8
-                sudo update-locale LANG=en_GB.UTF-8
+                locale-gen en_GB.UTF-8
+                update-locale LANG=en_GB.UTF-8
+
+            - name: install stuff
+              run: apt-get update && apt-get install -y ghostscript libfontconfig1
+
+            - name: check pwsh
+              shell: pwsh
+              run: Get-Location
 
             - uses: actions/checkout@v4
 
