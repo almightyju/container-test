@@ -19,6 +19,7 @@ on:
 jobs:
     test:
         runs-on: ubuntu-latest
+        container: node:20-alpine
         services:
             jsreport:
                 image: jsreport/jsreport:4.5.0-full
@@ -28,13 +29,10 @@ jobs:
                     extensions_chromePdf_launchOptions_args: --no-sandbox
         steps:
             - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                node-version: 'lts/*'
 
             - name: sleep
               run: sleep 10s
-              
+
             - name: exec
               env:
                 JSREPORT_HOSTNAME: ${{ inputs.jsreport_hostname }}
