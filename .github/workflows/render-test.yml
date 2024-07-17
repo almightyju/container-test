@@ -25,8 +25,6 @@ jobs:
         services:
             jsreport:
                 image: jsreport/jsreport:4.5.0-full
-                ports:
-                    - 5488:5488
                 env:
                     extensions_chromePdf_launchOptions_args: --no-sandbox
         steps:
