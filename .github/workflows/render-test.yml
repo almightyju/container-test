@@ -1,0 +1,46 @@
+name: Render Test
+
+on:
+    workflow_call:
+        inputs:
+            jsreport_hostname:
+                description: 'The hostname/ip that points to where jsreport is running'
+                default: 'localhost'
+                required: false
+                type: string
+            
+            http_server_hostname:
+                description: 'The hostname/ip that points to the web server that hosts the css file'
+                default: 'localhost'
+                required: false
+                type: string
+
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        services:
+            jsreport:
+                image: jsreport/jsreport:4.5.0-full
+                ports:
+                    - 5488:5488
+                env:
+                    extensions_chromePdf_launchOptions_args: --no-sandbox
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                node-version: 'lts'
+
+            - name: exec
+              env:
+                JSREPORT_HOSTNAME: ${{ inputs.jsreport_hostname }}
+                HTTP_SERVER_HOSTNAME: ${{ inputs.http_server_hostname }}
+              run: node ./exec.mjs
+            
+            - name: Save result
+              uses: actions/upload-artifact@v3
+              with:
+                name: result.pdf
+                path: result.pdf
+                retention-days: 5
