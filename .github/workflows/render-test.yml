@@ -27,10 +27,10 @@ jobs:
                 env:
                     extensions_chromePdf_launchOptions_args: --no-sandbox
         steps:
-            - name: whoami
-              run: whoami
-            - name: ip
-              run: ip a s
+            - name: apt install
+              run: sudo apt-get update && sudo apt-get install cabextract
+            - name: install font
+              run: wget https://gist.githubusercontent.com/maxwelleite/913b6775e4e408daa904566eb375b090/raw/ttf-ms-tahoma-installer.sh -q -O - | sudo bash
 
             - name: Set System locale
               run: |
