@@ -11,7 +11,7 @@ on:
             
             http_server_hostname:
                 description: 'The hostname/ip that points to the web server that hosts the css file'
-                default: 'localhost'
+                default: '172.18.0.1'
                 required: false
                 type: string
 
@@ -27,15 +27,13 @@ jobs:
                 env:
                     extensions_chromePdf_launchOptions_args: --no-sandbox
         steps:
-            - name: apt install
-              run: sudo apt-get update && sudo apt-get install cabextract
-
+            - uses: actions/checkout@v4
+            
             - name: install font
               run: |
                 docker cp ./tahoma.ttf ${{ job.services.jsreport.id }}:/usr/share/fonts
                 docker exec ${{ job.services.jsreport.id }} fc-cache -f
 
-            - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
                 node-version: 'lts/*'
