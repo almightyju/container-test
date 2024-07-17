@@ -19,7 +19,9 @@ on:
 jobs:
     test:
         runs-on: ubuntu-latest
-        container: node:20-alpine
+        container: 
+            image: node:20-alpine
+            options: --network-alias host
         services:
             jsreport:
                 image: jsreport/jsreport:4.5.0-full
