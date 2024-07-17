@@ -1,7 +1,7 @@
 name: Render Test
 
 on:
-    workflow_call:
+    workflow_dispatch:
         inputs:
             jsreport_hostname:
                 description: 'The hostname/ip that points to where jsreport is running'
